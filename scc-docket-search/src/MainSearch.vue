@@ -4,10 +4,13 @@
     <input
       type="text" name="search-input" v-model="search" :placeholder="phrase"
       autofocus>
+    <typeahead :input="search"></typeahead>
   </div>
 </template>
 
 <script>
+import TypeAhead from "./TypeAhead.vue"
+
 export default {
   name: 'MainSearch',
   data() {
@@ -18,6 +21,9 @@ export default {
   },
   props: [],
   methods: {
+  },
+  components: {
+    'typeahead': TypeAhead
   }
 }
 </script>
