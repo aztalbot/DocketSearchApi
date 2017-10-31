@@ -1,0 +1,7 @@
+Notes:
+Vue.js uses webpack and vue loader to create a single bundle.js
+Init a webpack template
+  - Create the project
+  - Follow instruction
+  - npm run dev to launch!
+  - npm run build to create build.js
