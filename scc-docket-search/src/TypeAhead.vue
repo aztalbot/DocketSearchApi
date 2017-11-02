@@ -1,14 +1,16 @@
 <template>
-  <div v-if="results.length > 0">
+  <div v-if="results.length > 0" @keyup.up="this.highlighted--" @keyup.down="this.highlighted++"
+    @keyup.enter="$parent.choose(this.results[highlighted].slice(currentTerm.length))">
     <ul>
-      <li v-for="result in results" @click="$parent.choose(result.slice(currentTerm.length))">
-        <b>{{result.slice(0, currentTerm.length)}}</b><span>{{result.slice(currentTerm.length)}}</span>
+      <li is="typeaheaditem" @choose="choose($event)" v-for="(result, i) in results" :current="highlighted"
+        :item="result" :term="currentTerm" :index="i">
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import TypeAheadItem from "./TypeAheadItem.vue";
 var mostUsed = require('./typeAheadData.js');
 
 export default {
@@ -16,16 +18,20 @@ export default {
   data() {
     return {
       results: [],
-      currentTerm: ""
+      currentTerm: "",
+      highlighted: 0
     }
   },
   props: ['input'],
   methods: {
     getResults(val) {
-      var lastTerm = val.split(' ').slice(-1);
-      this.currentTerm = lastTerm[0];
+      var lastTerm = val.split(' ').slice(-1)[0];
+      this.currentTerm = lastTerm;
       var data = mostUsed.getData();
-      return data.filter((x, i) => x.includes(lastTerm[0])).slice(0, 6);
+      return data.filter((x) => x.slice(0, lastTerm.length) == lastTerm).slice(0, 6);
+    },
+    choose(x) {
+      this.$parent.choose(x);
     }
   },
   watch: {
@@ -36,8 +42,13 @@ export default {
       } else {
         this.$emit('typeaheadActive')
         this.results = this.getResults(val);
+        if(this.results.length == 0)
+          this.$emit('typeaheadInactive');
       }
     }
+  },
+  components: {
+    'typeaheaditem': TypeAheadItem
   }
 }
 </script>
