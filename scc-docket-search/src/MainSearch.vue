@@ -44,7 +44,7 @@ export default {
       this.typeAheadActive = b;
     },
     choose(x) {
-      this.search = x;
+      this.search += x;
       this.typeAhead = false;
       this.status = "";
     }

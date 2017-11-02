@@ -1,26 +1,32 @@
 <template>
   <div v-if="results.length > 0">
     <ul>
-      <li v-for="result in results" @click="$parent.choose(result)">
-        {{ result }}
+      <li v-for="result in results" @click="$parent.choose(result.slice(currentTerm.length))">
+        <b>{{result.slice(0, currentTerm.length)}}</b><span>{{result.slice(currentTerm.length)}}</span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+var mostUsed = require('./typeAheadData.js');
+
 export default {
   name: 'TypeAhead',
   data() {
     return {
-      results: []
+      results: [],
+      currentTerm: ""
     }
   },
   props: ['input'],
   methods: {
     getResults(val) {
-      return ["Hello", "Hi, there!"];
-    },
+      var lastTerm = val.split(' ').slice(-1);
+      this.currentTerm = lastTerm[0];
+      var data = mostUsed.getData();
+      return data.filter((x, i) => x.includes(lastTerm[0])).slice(0, 6);
+    }
   },
   watch: {
     input: function (val) {
