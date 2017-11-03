@@ -18,72 +18,78 @@
 </template>
 
 <script>
-var mostUsed = require('./typeAheadData.js');
+  var mostUsed = require('./typeAheadData.js');
 
-export default {
-  name: 'TypeAhead',
-  data() {
-    return {
-      results: [],
-      currentTerm: "",
-      activeItem: -1,
-      search: "",
-      typeAheadActive: false
-    }
-  },
-  props: ['defaultText'],
-  methods: {
-    getResults(val) {
-      var lastTerm = val.split(' ').slice(-1)[0];
-      this.currentTerm = lastTerm;
-      var data = mostUsed.getData();
-      return data.filter((x) =>
-        x.slice(0, lastTerm.length) == lastTerm &&
-        x != lastTerm
-      ).slice(0, 6);
-    },
-    select() {
-      this.search += this.getActiveItem();
-      this.typeAhead = false;
-      this.activeItem = -1;
-    },
-    getActiveItem() {
-      return this.results[this.activeItem].slice(this.currentTerm.length);
-    },
-    up() {
-      this.activeItem--;
-    },
-    down() {
-      this.activeItem++;
-    },
-    isActive(index) {
-      return (index == this.activeItem) ? "active" : "";
-    },
-    setActive(index) {
-      this.activeItem = index;
-    },
-    escapeTypeAhead() {
-      if(!this.typeAheadActive) {
-        this.results = [];
+  export default {
+    name: 'TypeAhead',
+    data() {
+      return {
+        results: [],
+        currentTerm: "",
+        activeItem: -1,
+        search: "",
+        typeAheadActive: false
       }
-      return;
     },
-    typeAheadFocus(b) {
-      this.typeAheadActive = b;
+    props: ['defaultText'],
+    methods: {
+      getResults(val) {
+        var lastTerm = val.split(' ').slice(-1)[0];
+        this.currentTerm = lastTerm;
+        var data = mostUsed.getData();
+        return data.filter((x) =>
+          x.slice(0, lastTerm.length) == lastTerm &&
+          x != lastTerm
+        ).slice(0, 6);
+      },
+      select() {
+        if(this.activeItem > -1) {
+          this.search += this.getActiveItem();
+        } else {
+          alert("Form would be submitted!");
+        }
+        this.typeAhead = false;
+        this.activeItem = -1;
+      },
+      getActiveItem() {
+        return this.results[this.activeItem].slice(this.currentTerm.length);
+      },
+      up() {
+        if(this.activeItem > -1)
+          this.activeItem--;
+      },
+      down() {
+        if(this.activeItem < this.results.length - 1)
+          this.activeItem++;
+      },
+      isActive(index) {
+        return (index == this.activeItem) ? "active" : "";
+      },
+      setActive(index) {
+        this.activeItem = index;
+      },
+      escapeTypeAhead() {
+        if(!this.typeAheadActive) {
+          this.results = [];
+        }
+        return;
+      },
+      typeAheadFocus(b) {
+        this.typeAheadActive = b;
+      },
+      hasDropDown() {
+        return (this.results.length == 0) ? "" : "has-dropdown";
+      }
     },
-    hasDropDown() {
-      return (this.results.length == 0) ? "" : "has-dropdown";
-    }
-  },
-  watch: {
-    search: function (val) {
-      if(val == "")
-        this.results = [];
-      else
-        this.results = this.getResults(val);
+    watch: {
+      search: function (val) {
+        if(val == "")
+          this.results = [];
+        else
+          this.results = this.getResults(val);
+      }
     }
   }
-}
 </script>
 
 <style scoped>
@@ -92,6 +98,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 80%;
+    max-width: 700px;
     margin: 0 auto;
   }
   input {
@@ -103,6 +110,9 @@ export default {
     margin: 0 auto;
     padding: 4px 8px 4px 8px;
     outline: none;
+    -webkit-transition: box-shadow 0.2s ease-in-out;
+    -moz-transition: box-shadow 0.2s ease-in-out;
+    -o-transition: box-shadow 0.2s ease-in-out;
     transition: box-shadow 0.2s ease-in-out;
     box-shadow: 0px 1.5px 2px 0.5px rgb(85, 85, 85);
   }
