@@ -1,0 +1,29 @@
+{
+  "name": "scc-docket-search-api",
+  "version": "1.0.0",
+  "description": "RESTful sccDocketSearchAPI and Proxy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \\\"Error: no text specified\\\" && exit 1\"",
+    "start": "nodemon server.js"    
+  },
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "keywords": [
+    "\"RESTful\"",
+    "\"API\"",
+    "\"Search\""
+  ],
+  "author": "Andrew Talbot",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongoose": "^4.12.6",
+    "nodemon": "^1.12.1"
+  }
+}
